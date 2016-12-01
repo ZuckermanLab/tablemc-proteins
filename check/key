@@ -1,0 +1,3 @@
+parameters charmm19.prm
+digits     6
+dielectric 2.0

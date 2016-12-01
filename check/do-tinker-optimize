@@ -1,0 +1,23 @@
+#!/bin/bash
+
+#Run "protein.x" to generate peptide.
+aa=$1
+file="io/pep-$aa"
+echo "peptides/$aa-pep" > $file
+echo "$aa peptide" >> $file
+echo "charmm19.prm" >> $file
+echo "ace" >> $file
+echo "$aa" >> $file
+echo "nme" >> $file
+echo "" >> $file
+echo "n" >> $file
+echo "" >> $file
+~/tinker/source/protein.x < $file > /dev/null
+~/tinker/source/minimize.x peptides/$aa-pep 0.1 -k key >/dev/null
+~/tinker/source/optimize.x peptides/$aa-pep 0.001 -k key > /dev/null
+#This truncates all coordinates to 3 decimal places.
+~/tinker/source/xyzpdb.x peptides/$aa-pep -k key > /dev/null
+rm peptides/$aa-pep.xyz*
+~/tinker/source/pdbxyz.x peptides/$aa-pep -k key > /dev/null
+~/tinker/source/analyze.x peptides/$aa-pep e -k key > io/tinker-$aa.out
+

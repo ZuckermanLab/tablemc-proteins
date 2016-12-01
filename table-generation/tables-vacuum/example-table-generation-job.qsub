@@ -1,0 +1,14 @@
+#!/bin/bash
+#PBS -N generate-tables
+#PBS -j oe
+#PBS -q dmz_core8
+#PBS -l nodes=1:ppn=1
+#PBS -l walltime=24:00:00
+#PBS -t 1-64
+cd $PBS_O_WORKDIR
+line=`awk -v id=$PBS_ARRAYID '($1==id)' list`
+smooth=`echo $line | awk '{print $2}'`
+group=`echo $line | awk '{print $3}'`
+
+
+./generate-tables $group 32 0.1 10 30 0.2 20 30 $smooth $smooth

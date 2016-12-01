@@ -1,0 +1,904 @@
+#This is to be used with united atom force fields (e.g. CHARMM 19)
+#Residue names consistent with TINKER.
+#TINKER's HIS is CHARMM's HSC (doubly protonated histidine)
+#TINKER's HID is CHARMM's HIS (proton on ND)
+#TINKER's HIE is CHARMM's HSD (proton on NE)
+#Atom ordering consistent with CHARMM's topology file, so that psf's written with CHARMM
+#can be used with dcd's from tablemc.
+FRAG peptide-gly fragments/peptide-gly.xyz
+FRAG peptide fragments/peptide.xyz
+FRAG methyl fragments/methyl.xyz
+FRAG ch2oh fragments/ch2oh.xyz
+FRAG chch3 fragments/chch3.xyz
+FRAG chch3b fragments/chch3b.xyz
+FRAG hydroxyl fragments/hydroxyl.xyz
+FRAG ch2s fragments/ch2s.xyz
+FRAG isopropyl fragments/isopropyl.xyz
+FRAG isobutyl fragments/isobutyl.xyz
+FRAG ethyl fragments/ethyl.xyz
+FRAG ch2ch2 fragments/ch2ch2.xyz
+FRAG sch3 fragments/sch3.xyz
+FRAG peptide-pro fragments/peptide-pro.xyz
+FRAG sidechain-pro fragments/sidechain-pro.xyz
+FRAG benzyl fragments/benzyl.xyz
+FRAG benzyl2 fragments/benzyl2.xyz
+FRAG indole1 fragments/indole1.xyz
+FRAG indole2 fragments/indole2.xyz
+FRAG carboxyl fragments/carboxyl.xyz
+FRAG ch2 fragments/ch2.xyz
+FRAG carboxamide fragments/carboxamide.xyz
+FRAG imidazole1 fragments/imidazole1.xyz
+FRAG imidazole2 fragments/imidazole2.xyz
+FRAG imidazolium fragments/imidazolium.xyz
+FRAG ch2ch2ch2 fragments/ch2ch2ch2.xyz
+FRAG methylammonium fragments/methylammonium.xyz
+FRAG ch2ch2b fragments/ch2ch2b.xyz
+FRAG guanidinium fragments/guanidinium.xyz
+FRAG cter fragments/cter.xyz
+FRAG n-methyl-amide fragments/n-methyl-amide.xyz
+RESI ACE
+	ATOM CH3 BRANCH
+	ATOM C
+	ATOM O
+	BOND CH3 C
+	BOND C O
+	FRAG methyl BACKBONE
+		CH3 CB
+	END
+END
+RESI NME
+	ATOM N
+	ATOM H
+	ATOM CH3 BRANCH
+	BOND N -C
+	BOND N H
+	BOND N CH3
+	FRAG n-methyl-amide BACKBONE
+		-C C
+		-O O
+		N N
+		H H
+		CH3 CA
+	END
+END
+RESI GLY
+        ATOM N              
+        ATOM H      
+        ATOM CA BRANCH
+        ATOM C       
+        ATOM O         
+        BOND N -C               
+        BOND N H     
+        BOND N CA ROTATABLE BACKBONE
+        BOND CA C ROTATABLE BACKBONE
+        BOND C O
+        FRAG peptide-gly BACKBONE
+                -C C
+                -O O
+                N N
+                H H
+                CA CA
+        END
+END
+RESI ALA
+	ATOM N
+	ATOM H
+	ATOM CA BRANCH
+	ATOM CB
+	ATOM C
+	ATOM O
+	BOND N -C
+	BOND N H
+	BOND N CA ROTATABLE BACKBONE
+	BOND CA CB
+	BOND CA C ROTATABLE BACKBONE
+	BOND C O
+	FRAG peptide BACKBONE
+		-C C
+		-O O
+		N N
+		H H
+		CA CA
+	END
+	FRAG methyl SIDECHAIN
+		CB CB
+	END
+END
+RESI SER
+        ATOM N
+        ATOM H
+        ATOM CA BRANCH
+        ATOM CB
+	ATOM OG
+	ATOM HG
+        ATOM C  
+        ATOM O  
+        BOND N -C
+        BOND N H
+        BOND N CA ROTATABLE BACKBONE
+        BOND CA CB ROTATABLE SIDECHAIN
+	BOND CB OG ROTATABLE SIDECHAIN
+	BOND OG HG
+        BOND CA C ROTATABLE BACKBONE
+        BOND C O
+        FRAG peptide BACKBONE
+                -C C
+                -O O
+                N N
+                H H
+                CA CA
+        END
+        FRAG ch2oh SIDECHAIN
+                CB CB
+		OG OG
+		HG HG
+        END
+END
+RESI THR
+        ATOM N
+        ATOM H              
+        ATOM CA BRANCH
+        ATOM CB      
+        ATOM OG1  
+        ATOM HG1
+	ATOM CG2
+        ATOM C
+        ATOM O
+        BOND N -C
+        BOND N H
+        BOND N CA ROTATABLE BACKBONE
+        BOND CA CB ROTATABLE SIDECHAIN
+        BOND CB OG1 ROTATABLE SIDECHAIN
+	BOND OG1 HG1
+	BOND CB CG2
+        BOND CA C ROTATABLE BACKBONE
+        BOND C O             
+        FRAG peptide BACKBONE
+                -C C
+                -O O
+                N N 
+                H H                
+                CA CA                 
+        END
+        FRAG chch3b SIDECHAIN
+                CB CB
+		CG2 CG2
+        END
+	FRAG hydroxyl SIDECHAIN
+		OG1 OG1
+		HG1 HG1
+	END
+END 
+RESI VAL
+	ATOM N
+	ATOM H
+	ATOM CA BRANCH
+	ATOM CB
+	ATOM CG1
+	ATOM CG2
+	ATOM C
+	ATOM O
+	BOND N -C
+	BOND N H
+	BOND N CA ROTATABLE BACKBONE
+	BOND CA CB ROTATABLE SIDECHAIN
+	BOND CA C ROTATABLE BACKBONE
+	BOND C O
+	BOND CB CG1 
+	BOND CB CG2
+	FRAG peptide BACKBONE
+		-C C
+		-O O
+		N N
+		H H
+		CA CA
+	END
+	FRAG isopropyl SIDECHAIN
+		CB CB
+		CG1 CG1
+		CG2 CG2
+	END
+END
+RESI CYS
+        ATOM N
+        ATOM H        
+        ATOM CA BRANCH
+        ATOM CB 
+	ATOM SG
+        ATOM C
+        ATOM O
+        BOND N -C
+        BOND N H
+        BOND N CA ROTATABLE BACKBONE
+        BOND CA CB ROTATABLE SIDECHAIN
+        BOND CB SG 
+        BOND CA C ROTATABLE BACKBONE
+        BOND C O             
+        FRAG peptide BACKBONE
+                -C C
+                -O O
+                N N 
+                H H 
+                CA CA
+        END
+        FRAG ch2s SIDECHAIN
+                CB CB
+		SG SG
+        END    
+END             
+RESI LEU
+        ATOM N      
+        ATOM H
+        ATOM CA BRANCH
+        ATOM CB                 
+        ATOM CG
+	ATOM CD1  
+        ATOM CD2      
+        ATOM C        
+        ATOM O      
+        BOND N -C    
+        BOND N H                      
+        BOND N CA ROTATABLE BACKBONE
+        BOND CA CB ROTATABLE SIDECHAIN
+        BOND CA C ROTATABLE BACKBONE
+        BOND C O             
+        BOND CB CG ROTATABLE SIDECHAIN 
+        BOND CG CD1
+	BOND CG CD2
+        FRAG peptide BACKBONE
+                -C C
+                -O O
+                N N
+                H H
+                CA CA
+        END
+        FRAG isobutyl SIDECHAIN
+                CB CB
+                CG CG
+                CD1 CD1
+		CD2 CD2
+        END
+END
+RESI ILE
+        ATOM N
+        ATOM H
+        ATOM CA BRANCH
+        ATOM CB
+        ATOM CG2
+        ATOM CG1
+        ATOM CD1
+        ATOM C
+        ATOM O
+        BOND N -C
+        BOND N H
+        BOND N CA ROTATABLE BACKBONE
+        BOND CA CB ROTATABLE SIDECHAIN
+        BOND CA C ROTATABLE BACKBONE
+        BOND C O    
+        BOND CB CG2 
+        BOND CB CG1 ROTATABLE SIDECHAIN   
+        BOND CG1 CD1
+        FRAG peptide BACKBONE
+                -C C   
+                -O O
+                N N
+                H H
+                CA CA
+        END
+        FRAG chch3 SIDECHAIN
+                CB CB
+                CG2 CG2
+        END
+	FRAG ethyl SIDECHAIN
+		CG1 CG1
+		CD1 CD
+	END	
+END           
+RESI MET
+        ATOM N
+        ATOM H
+        ATOM CA BRANCH
+        ATOM CB
+        ATOM CG
+        ATOM SD
+	ATOM CE
+        ATOM C
+        ATOM O
+        BOND N -C
+        BOND N H
+        BOND N CA ROTATABLE BACKBONE
+        BOND CA CB ROTATABLE SIDECHAIN
+	BOND CB CG ROTATABLE SIDECHAIN
+	BOND CG SD ROTATABLE SIDECHAIN
+	BOND SD CE ROTATABLE SIDECHAIN
+        BOND CA C ROTATABLE BACKBONE
+        BOND C O    
+        FRAG peptide BACKBONE
+                -C C   
+                -O O
+                N N
+                H H
+                CA CA
+        END
+        FRAG ch2ch2 SIDECHAIN
+                CB CB
+                CG CG
+        END
+	FRAG sch3 SIDECHAIN
+		SD SD
+		CE CE
+	END	
+END 
+#Side chain moves are possible for proline, but they are coded directly in the program.
+RESI PRO
+	ATOM N
+	ATOM CD
+	ATOM CA BRANCH
+	ATOM CB
+	ATOM CG
+	ATOM C
+	ATOM O
+	BOND N -C
+	BOND N CD
+	BOND N CA ROTATABLE BACKBONE
+	BOND CA CB
+	BOND CB CG
+	BOND CG CD
+	BOND CA C ROTATABLE BACKBONE
+	BOND C O
+	FRAG peptide-pro BACKBONE
+		-C C
+		-O O
+		N N
+		CA CA
+	END
+	FRAG sidechain-pro SIDECHAIN
+		CD CD 
+		CB CB
+		CG CG
+	END
+END
+RESI PHE
+	ATOM N
+	ATOM H
+	ATOM CA BRANCH
+	ATOM CB
+	ATOM CG
+	ATOM CD1
+	ATOM CD2
+	ATOM CE1
+	ATOM CE2
+	ATOM CZ
+	ATOM C
+	ATOM O
+	BOND N -C
+	BOND N H
+	BOND N CA ROTATABLE BACKBONE
+	BOND CA CB ROTATABLE SIDECHAIN
+	BOND CB CG ROTATABLE SIDECHAIN
+	BOND CG CD1
+	BOND CG CD2
+	BOND CD1 CE1
+	BOND CD2 CE2
+	BOND CE1 CZ
+	BOND CE2 CZ
+	BOND CA C ROTATABLE BACKBONE
+	BOND C O
+	FRAG peptide BACKBONE
+		-C C
+		-O O
+		N N
+		H H
+		CA CA
+	END
+	FRAG benzyl SIDECHAIN
+		CB CB
+		CG CG
+		CD1 CD1
+		CD2 CD2
+		CE1 CE1
+		CE2 CE2
+		CZ CZ
+	END
+END
+RESI TYR
+	ATOM N
+	ATOM H
+	ATOM CA BRANCH
+	ATOM CB
+	ATOM CG
+	ATOM CD1
+	ATOM CE1
+	ATOM CD2
+	ATOM CE2
+	ATOM CZ
+	ATOM OH
+	ATOM HH
+	ATOM C
+	ATOM O
+	BOND N -C
+	BOND N H
+	BOND N CA ROTATABLE BACKBONE
+	BOND CA CB ROTATABLE SIDECHAIN
+	BOND CB CG ROTATABLE SIDECHAIN
+	BOND CG CD1
+	BOND CG CD2
+	BOND CD1 CE1
+	BOND CD2 CE2
+	BOND CE1 CZ
+	BOND CE2 CZ
+	BOND CZ OH ROTATABLE SIDECHAIN
+	BOND OH HH 
+	BOND CA C ROTATABLE BACKBONE
+	BOND C O
+	FRAG peptide BACKBONE
+		-C C
+		-O O
+		N N
+		H H
+		CA CA
+	END
+	FRAG benzyl2 SIDECHAIN
+		CB CB
+		CG CG
+		CD1 CD1
+		CD2 CD2
+		CE1 CE1
+		CE2 CE2
+		CZ CZ
+	END
+	FRAG hydroxyl SIDECHAIN
+		OH OG1
+		HH HG1
+	END
+END
+RESI TRP
+	ATOM N
+	ATOM H
+	ATOM CA BRANCH
+	ATOM CB
+	ATOM CG
+	ATOM CD2
+	ATOM CE2
+	ATOM CE3
+	ATOM CD1
+	ATOM NE1
+	ATOM HE1
+	ATOM CZ2
+	ATOM CZ3
+	ATOM CH2
+	ATOM C
+	ATOM O
+	BOND N -C
+	BOND N H
+	BOND N CA ROTATABLE BACKBONE
+	BOND CA CB ROTATABLE SIDECHAIN
+	BOND CB CG ROTATABLE SIDECHAIN
+	BOND CG CD1
+	BOND CG CD2
+	BOND CD1 NE1
+	BOND NE1 HE1
+	BOND CD2 CE2 ROTATABLE SIDECHAIN
+	BOND NE1 CE2
+	BOND CD2 CE3
+	BOND CE2 CZ2
+	BOND CE3 CZ3
+	BOND CZ2 CH2
+	BOND CZ3 CH2
+	BOND CA C ROTATABLE BACKBONE
+	BOND C O
+	FRAG peptide BACKBONE
+		-C C
+		-O O
+		N N
+		H H
+		CA CA
+	END
+	FRAG indole1 SIDECHAIN
+		CB CB
+		CG CG
+		CD1 CD1
+		NE1 NE1
+		HE1 HE1
+	END
+	FRAG indole2 SIDECHAIN
+		CD2 CD2
+		CE2 CE2
+		CE3 CE3
+		CZ2 CZ2
+		CZ3 CZ3
+		CH2 CH2
+	END
+END
+RESI ASP
+        ATOM N
+        ATOM H
+        ATOM CA BRANCH
+        ATOM CB
+	ATOM CG
+	ATOM OD1
+	ATOM OD2
+	ATOM C  
+        ATOM O  
+        BOND N -C
+        BOND N H
+        BOND N CA ROTATABLE BACKBONE
+        BOND CA CB ROTATABLE SIDECHAIN
+	BOND CB CG ROTATABLE SIDECHAIN
+	BOND CG OD1
+	BOND CG OD2
+        BOND CA C ROTATABLE BACKBONE
+        BOND C O
+        FRAG peptide BACKBONE
+                -C C
+                -O O
+                N N
+                H H
+                CA CA
+        END
+        FRAG carboxyl SIDECHAIN
+                CB CB
+		CG CG
+		OD1 OD1
+		OD2 OD2
+        END
+END
+RESI GLU
+        ATOM N
+        ATOM H
+        ATOM CA BRANCH
+        ATOM CB
+	ATOM CG
+	ATOM CD
+	ATOM OE1
+	ATOM OE2
+	ATOM C  
+        ATOM O  
+        BOND N -C
+        BOND N H
+        BOND N CA ROTATABLE BACKBONE
+        BOND CA CB ROTATABLE SIDECHAIN
+	BOND CB CG ROTATABLE SIDECHAIN
+	BOND CG CD ROTATABLE SIDECHAIN
+	BOND CD OE1
+	BOND CD OE2
+        BOND CA C ROTATABLE BACKBONE
+        BOND C O
+        FRAG peptide BACKBONE
+                -C C
+                -O O
+                N N
+                H H
+                CA CA
+        END
+	FRAG ch2 SIDECHAIN
+		CB CB
+	END
+        FRAG carboxyl SIDECHAIN
+                CG CB
+		CD CG
+		OE1 OD1
+		OE2 OD2
+        END
+END
+RESI ASN
+        ATOM N
+        ATOM H
+        ATOM CA BRANCH
+        ATOM CB
+	ATOM CG
+	ATOM OD1
+	ATOM ND2
+	ATOM HD21
+	ATOM HD22
+	ATOM C  
+        ATOM O  
+        BOND N -C
+        BOND N H
+        BOND N CA ROTATABLE BACKBONE
+        BOND CA CB ROTATABLE SIDECHAIN
+	BOND CB CG ROTATABLE SIDECHAIN
+	BOND CG OD1
+	BOND CG ND2
+	BOND ND2 HD21
+	BOND ND2 HD22
+        BOND CA C ROTATABLE BACKBONE
+        BOND C O
+        FRAG peptide BACKBONE
+                -C C
+                -O O
+                N N
+                H H
+                CA CA
+        END
+        FRAG carboxamide SIDECHAIN
+                CB CB
+		CG CG
+		OD1 OD1
+		ND2 ND2
+		HD21 HD21
+		HD22 HD22
+        END
+END
+RESI GLN
+        ATOM N
+        ATOM H
+        ATOM CA BRANCH
+        ATOM CB
+	ATOM CG
+	ATOM CD
+	ATOM OE1
+	ATOM NE2
+	ATOM HE21
+	ATOM HE22
+	ATOM C  
+        ATOM O  
+        BOND N -C
+        BOND N H
+        BOND N CA ROTATABLE BACKBONE
+        BOND CA CB ROTATABLE SIDECHAIN
+	BOND CB CG ROTATABLE SIDECHAIN
+	BOND CG CD ROTATABLE SIDECHAIN
+	BOND CD OE1
+	BOND CD NE2
+	BOND NE2 HE21
+	BOND NE2 HE22
+        BOND CA C ROTATABLE BACKBONE
+        BOND C O
+        FRAG peptide BACKBONE
+                -C C
+                -O O
+                N N
+                H H
+                CA CA
+        END
+	FRAG ch2 SIDECHAIN
+		CB CB
+	END
+        FRAG carboxamide SIDECHAIN
+                CG CB
+		CD CG
+		OE1 OD1
+		NE2 ND2
+		HE21 HD21
+		HE22 HD22
+        END
+END
+RESI HIS
+	ATOM N
+	ATOM H
+	ATOM CA BRANCH
+	ATOM CB
+	ATOM CG
+	ATOM CD2
+	ATOM ND1
+	ATOM HD1
+	ATOM CE1
+	ATOM NE2
+	ATOM HE2
+	ATOM C
+	ATOM O
+	BOND N -C
+	BOND N H
+	BOND N CA ROTATABLE BACKBONE
+	BOND CA CB ROTATABLE SIDECHAIN
+	BOND CB CG ROTATABLE SIDECHAIN
+	BOND CG CD2
+	BOND CG ND1
+	BOND ND1 HD1
+	BOND ND1 CE1
+	BOND CD2 NE2
+	BOND NE2 HE2
+	BOND NE2 CE1
+	BOND CA C ROTATABLE BACKBONE
+	BOND C O
+	FRAG peptide BACKBONE
+		-C C
+		-O O
+		N N
+		H H
+		CA CA
+	END
+	FRAG imidazolium SIDECHAIN
+		CB CB
+		CG CG
+		CD2 CD2
+		ND1 ND1
+		HD1 HD1
+		CE1 CE1
+		NE2 NE2
+		HE2 HE2
+	END
+END
+RESI HID
+	ATOM N
+	ATOM H
+	ATOM CA BRANCH
+	ATOM CB
+	ATOM CG
+	ATOM ND1
+	ATOM HD1
+	ATOM CD2
+	ATOM NE2
+	ATOM CE1
+	ATOM C
+	ATOM O
+	BOND N -C
+	BOND N H
+	BOND N CA ROTATABLE BACKBONE
+	BOND CA CB ROTATABLE SIDECHAIN
+	BOND CB CG ROTATABLE SIDECHAIN
+	BOND CG CD2
+	BOND CG ND1
+	BOND ND1 HD1
+	BOND ND1 CE1
+	BOND CD2 NE2
+	BOND NE2 CE1
+	BOND CA C ROTATABLE BACKBONE
+	BOND C O
+	FRAG peptide BACKBONE
+		-C C
+		-O O
+		N N
+		H H
+		CA CA
+	END
+	FRAG imidazole1 SIDECHAIN
+		CB CB
+		CG CG
+		CD2 CD2
+		ND1 ND1
+		HD1 HD1
+		CE1 CE1
+		NE2 NE2
+	END
+END
+RESI HIE
+	ATOM N
+	ATOM H
+	ATOM CA BRANCH
+	ATOM CB
+	ATOM CG
+	ATOM ND1
+	ATOM CE1
+	ATOM CD2
+	ATOM NE2
+	ATOM HE2
+	ATOM C
+	ATOM O
+	BOND N -C
+	BOND N H
+	BOND N CA ROTATABLE BACKBONE
+	BOND CA CB ROTATABLE SIDECHAIN
+	BOND CB CG ROTATABLE SIDECHAIN
+	BOND CG CD2
+	BOND CG ND1
+	BOND ND1 CE1
+	BOND CD2 NE2
+	BOND NE2 HE2
+	BOND NE2 CE1
+	BOND CA C ROTATABLE BACKBONE
+	BOND C O
+	FRAG peptide BACKBONE
+		-C C
+		-O O
+		N N
+		H H
+		CA CA
+	END
+	FRAG imidazole2 SIDECHAIN
+		CB CB
+		CG CG
+		CD2 CD2
+		ND1 ND1
+		CE1 CE1
+		NE2 NE2
+		HE2 HE2
+	END
+END
+RESI LYS
+        ATOM N
+        ATOM H
+        ATOM CA BRANCH
+        ATOM CB
+        ATOM CG
+        ATOM CD
+	ATOM CE
+	ATOM NZ
+	ATOM HZ1
+	ATOM HZ2
+	ATOM HZ3
+        ATOM C
+        ATOM O
+        BOND N -C
+        BOND N H
+        BOND N CA ROTATABLE BACKBONE
+        BOND CA CB ROTATABLE SIDECHAIN
+	BOND CB CG ROTATABLE SIDECHAIN
+	BOND CG CD ROTATABLE SIDECHAIN
+	BOND CD CE ROTATABLE SIDECHAIN
+	BOND CE NZ ROTATABLE SIDECHAIN
+	BOND NZ HZ1
+	BOND NZ HZ2
+	BOND NZ HZ3
+        BOND CA C ROTATABLE BACKBONE
+        BOND C O    
+        FRAG peptide BACKBONE
+                -C C   
+                -O O
+                N N
+                H H
+                CA CA
+        END
+        FRAG ch2ch2ch2 SIDECHAIN
+                CB CB
+                CG CG
+		CD CD
+        END
+	FRAG methylammonium SIDECHAIN
+		CE CE
+		NZ NZ
+		HZ1 HZ1
+		HZ2 HZ2
+		HZ3 HZ3
+	END	
+END 
+RESI ARG
+        ATOM N
+        ATOM H
+        ATOM CA BRANCH
+        ATOM CB
+        ATOM CG
+        ATOM CD
+	ATOM NE
+	ATOM HE
+	ATOM CZ
+	ATOM NH1
+	ATOM HH11
+	ATOM HH12
+	ATOM NH2
+	ATOM HH21
+	ATOM HH22
+        ATOM C
+        ATOM O
+        BOND N -C
+        BOND N H
+        BOND N CA ROTATABLE BACKBONE
+        BOND CA CB ROTATABLE SIDECHAIN
+	BOND CB CG ROTATABLE SIDECHAIN
+	BOND CG CD ROTATABLE SIDECHAIN
+	BOND CD NE ROTATABLE SIDECHAIN
+	BOND NE HE
+	BOND NE CZ
+	BOND CZ NH1
+	BOND NH1 HH11
+	BOND NH1 HH12
+	BOND CZ NH2
+	BOND NH2 HH21
+	BOND NH2 HH22
+        BOND CA C ROTATABLE BACKBONE
+        BOND C O    
+        FRAG peptide BACKBONE
+                -C C   
+                -O O
+                N N
+                H H
+                CA CA
+        END
+        FRAG ch2ch2b SIDECHAIN
+                CB CB
+                CG CG
+        END
+	FRAG guanidinium SIDECHAIN
+		CD CD	
+		NE NE
+		HE HE
+		CZ CZ
+		NH1 NH1
+		HH11 HH11
+		HH12 HH12
+		NH2 NH2
+		HH21 HH21
+		HH22 HH22
+	END	
+END 

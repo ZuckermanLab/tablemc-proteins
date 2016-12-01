@@ -1,0 +1,12 @@
+defs-protein3.txt charmm19.prm
+ACE :name; NME
+END
+start peptides/:name;-pep.pdb peptides/:name;-pep2.pdb
+1000 1 1 0 0 300.00
+1 0 0.0 98.0 99.0 1.0 0
+backbone :bb; 60.0
+sidechain :sc; 80.0
+backrub 0.0 0.0
+end
+dcd/:name;.dcd dcd/:name;.dat
+

@@ -1,0 +1,83 @@
+#!/bin/bash
+
+tablemc=~/tabulation3/tablemc-3-26-14/tablemc 
+ff=charmm19-scaled.prm
+polar=`cat polar-fragments` 
+all=`cat all-fragments`
+#all=`cat medium-fragments`
+ntype=`echo $all | wc -w | awk '{print $1}'`
+group=$1
+ngroup=$2
+polartres=$3
+polarares=$4
+polarores=$5
+nptres=$6
+npares=$7
+npores=$8
+invalid=0 #have invalid cells
+if [ "$#" -eq "8" ]; then
+	atheta=0
+	otheta=0
+	dirname=tables-$polartres-$polarares-$polarores-$nptres-$npares-$npores
+elif [ "$9" == "invalid" ]; then
+	invalid=1
+	enlimit=${10} #energy limit
+	dirname=tables-$polartres-$polarares-$polarores-$nptres-$npares-$npores-inv-$enlimit
+else
+	atheta=$9
+	otheta=${10}
+	dirname=tables-$polartres-$polarares-$polarores-$nptres-$npares-$npores-$atheta-$otheta
+fi
+mkdir $dirname
+log=`echo $dirname | sed -e 's/tables/log/g'`
+count=0
+for itype in `seq 1 $ntype`
+do
+	for jtype in `seq $itype $ntype`
+	do
+		count=`expr $count + 1`
+		#Generate a fraction of the tables specified by "group" and "ngroup".  a mechanism for dividing table generation among multiple processors.
+		check=`expr $count % $ngroup`
+		if [ "$check" -ne "$group" ]; then
+			continue 
+		fi		
+		iname=`echo $all | awk -v i=$itype '{print $i}'`
+		jname=`echo $all | awk -v i=$jtype '{print $i}'`
+		#we must select whole words (grep -w) otherwise "methyl" counts due to inclusion within "n-methyl-amide"
+		ipolar=`echo $polar | awk -v word=$iname '{result=0; for (i=1; i<=NF; i++) if ($i==word) result=1; print result}'`
+		jpolar=`echo $polar | awk -v word=$jname '{result=0; for (i=1; i<=NF; i++) if ($i==word) result=1; print result}'`
+		ifname=fragments3-scaled/$iname.xyz
+		jfname=fragments3-scaled/$jname.xyz
+		bothpolar=0
+		if [ "$ipolar" -gt "0"  -a  "$jpolar" -gt "0"  ]; then
+			bothpolar=1
+		fi
+		echo $iname $jname $ifname $jfname
+                control="io/control-$dirname-$iname-$jname.txt"
+		tablename="$dirname/$iname-$jname.dat"
+		if [ -s "$tablename" ]; then
+			continue
+		fi
+                if [ "$bothpolar" -gt 0 ]; then
+                        echo "2.0 12.0 $polartres $polarares $polarores" > $control
+                else
+                        echo "2.0 12.0 $nptres $npares $npores" > $control
+                fi
+                smooth=`echo $atheta | awk '{print ($1>0)}'`
+                #This line: dielec const, dist. dep. dielec., smooth temp,
+		if [ "$invalid" -gt "0" ]; then #mark invalid cells
+			echo "2.0 1 300.0 0.0 0.0 1 $enlimit" >> $control
+                elif [ "$smooth" -ne "0" ]; then #smooth
+                        echo "2.0 1 300.00 $atheta $otheta 0 0.0" >> $control
+                else
+                        echo "2.0 1 300.00 0.0 0.0 0 0.0" >> $control #no smoothing
+                fi
+		echo $ifname >> $control
+		echo $jfname >> $control
+		echo $ff >> $control
+		#generate table
+		echo "Start generating table for fragments $iname and $jname at `date`" >> $log
+		$tablemc generate $control $tablename | tee io/generate-$dirname-$iname-$jname.out
+		echo "End generating table for fragments $iname and $jname at `date`" >> $log
+	done
+done

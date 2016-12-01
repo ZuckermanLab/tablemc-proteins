@@ -1,0 +1,34 @@
+#!/bin/bash
+
+name=$1
+rm results
+rm peptides/* #remove any old xyz files 
+for name in `cat amino-acids`
+do
+	echo $name
+	name2=`echo $name | awk '{print tolower($0)}'`
+	./do-tinker-optimize $name2	
+	file=io/test-$name2.txt #special "test" command file.
+	#GLY, ALA, and PRO have no rotatable sidechain bonds.  Therefore, we do not do sidechain moves when testing them.
+	#All other amino acids do side chain moves only.
+	bb=`echo "GLY ALA PRO" | grep -ci $name`
+	sc=`expr 1 - $bb`
+	sed -e "s/:name;/$name2/g" -e "s/:bb;/$bb/g" -e "s/:sc;/$sc/g" exact.txt > $file
+	../tablemc-test/tablemc $file >  io/test-$name2.out
+	#From CHARMM: name, bonds, angles, dihe, impr, vdw+elec
+	#awk '{print $1,$2,$3,$4,$5,$6+$7}' temp > temp2
+	#From Tinker: smae format
+	bond=`awk '/Bond Stretching/ {print $3}' io/tinker-$name2.out`
+	angle=`awk '/Angle Bending/ {print $3}' io/tinker-$name2.out`
+	dihe=`awk '/Torsional Angle/ {print $3}' io/tinker-$name2.out`
+	impr=`awk '/Improper Dihedral/ {print $3}' io/tinker-$name2.out`
+	vdw=`awk '/Van der Waals/ {print $4}' io/tinker-$name2.out`
+	elec=`awk '/Charge-Charge/ {print $2}' io/tinker-$name2.out`
+	inte=`echo $vdw $elec | awk '{print $1+$2}'`
+	echo "$name $bond $angle $dihe $impr $inte" > temp2	
+	#From tablemc: bonds, angles, dihe, impr, interaction+all corrections
+	grep -i "init:" io/test-$name2.out | awk '(NR==2) {print $5,$6,$7,$8,$4+$9+$10}' > temp3
+	paste temp2 temp3 >> results
+done
+	
+	

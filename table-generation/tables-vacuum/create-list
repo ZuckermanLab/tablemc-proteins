@@ -1,0 +1,14 @@
+#!/bin/bash
+
+rm list
+counter=1
+procs=32
+procsm1=`expr $procs - 1`
+for smooth in `seq 0 60 60`
+do
+	for group in `seq 0 $procsm1`
+	do
+		echo "$counter $smooth $group" >> list
+		counter=`expr $counter + 1`
+	done
+done 
