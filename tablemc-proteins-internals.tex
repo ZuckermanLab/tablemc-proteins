@@ -1,0 +1,242 @@
+% This is a sample LaTeX input file.  (Version of 11 April 1994.)
+%
+% A '%' character causes TeX to ignore all remaining text on the line,
+% and is used for comments like this one.
+
+\documentclass{article}      % Specifies the document class
+
+                             % The preamble begins here.
+\title{Tabulated MC for Proteins -- Internals}  % Declares the document's title.
+\author{Justin Spiriti}      % Declares the author's name.
+%\date{January 21, 1994}      % Deleting this command produces today's date.
+
+%\newcommand{\ip}[2]{(#1, #2)}
+                             % Defines \ip{arg1}{arg2} to mean
+                             % (arg1, arg2).
+
+%\newcommand{\ip}[2]{\langle #1 | #2\rangle}
+                             % This is an alternative definition of
+                             % \ip that is commented out.
+\setlength{\textwidth}{6.5in}
+\setlength{\textheight}{9in}
+\setlength{\hoffset}{-0.75in}
+\setlength{\voffset}{-1in}
+\begin{document}             % End of preamble and beginning of text.
+
+\maketitle                   % Produces the title.
+
+\section{General}
+
+Double precision arithmetic is used in the program throughout, except for storing table entries (where single precision saves memory) or when writing DCD files (where it is part of the file format).
+
+Cartesian coordinates are stored as a one-dimensional array in the order $x_1, y_1, z_1, x_2, y_2, z_2, \dots$.  Rotations are represented by normalized quaternions with positive real part, and are stored with the real part first, followed by the $x$, $y$, and $z$ components.  
+
+Most of the basic math routines are found in \verb+rotations.cpp+.  These include converting back and forth between quaternions, matrices, Euler angles, and axis-angle representations, performing quaternion and matrix arithmetic, and performing RMSD fitting, among many other things.  Note that if we have two rotations 1 and 2, the quaternion representing performing rotation 1 followed by 2 is given by the forward product $\mathbf{q}_1 \mathbf{q}_2$, but if using rotation matrices the corresponding matrix is given by the reverse product  $R_2 R_1$ (that is to say, quaternions are multiplied in the same order as the rotations are performed, while matrices are multiplied in the reverse order).  
+
+The system is divided into fragments, each of which is one of several fragment types.  Each fragment type is identified by a name and a numerical index which points to a \verb+fragmenttype+ object in the \verb+top->fragtypes+ array.  The \verb+tables+ array is a two dimensional array of pointers to table objects, which is indexed by pairs of type numbers.  
+
+Throughout most of the code, individual atoms are identified by their index in the overall system, from 0 to \verb+top->natom-1+.  However, each atom also has an index corresponding to its position within the fragment.  In some cases it is necessary to rearrange coordinates of atoms from the ordering they have in the whole system to the ordering they have in an individual fragment.  
+
+The \verb+io.cpp+ file contains subroutines for performing I/O operations.  Many of the constructors for objects also take file names and read information from those files.  
+
+\section{class \texttt{simulation}}
+This class represents a simulation, and is defined in \verb+mc.h+.  Besides information on the current configuration, there are many members giving simulation parameters, and open file handles to the trajectory output files.
+
+\subsection{Major fields}
+
+\begin{tabular}{|p{8cm}|p{8cm}|}
+\hline
+Name &  Description \\
+\hline
+\verb+oldcenter+, \verb+oldorient+, \verb+oldcoords+ & The current fragment centers, orientations and atomic coordinates, before the current MC move. \\
+\hline
+\verb+newcenter+, \verb+neworient+, \verb+newcoords+ & The current centers, orientations and atomic coordinates, after the current MC move.) \\
+\hline
+\verb+top+ & Topology object (of class \verb+topology+). \\
+\hline
+\verb+ffield+ & Force field object (of class \verb+forcefield+). \\
+\hline
+\verb+tables+ & Two-dimensional array of table objects, indexed by pairs of fragment type numbers. \\
+\hline
+\end{tabular}
+
+\subsection{Major methods}
+
+
+
+\begin{tabular}{|p{7cm}|p{3cm}|p{6cm}|}
+\hline
+Name & File & Description \\
+\hline
+\verb+simulation::mcloop+ & \verb+mc.cpp+ & Main Monte Carlo loop \\
+\hline
+\verb+simulation::mcmove+ & \verb+mcmoves.cpp+ & Performs MC moves (master routine, calls several others) \\
+\hline
+\verb+simulation::total_energy+ &  \verb+mc.cpp+& Calculates total energy \\
+\hline
+\verb+simulation::moved_energy+ & \verb+mc.cpp+ & Calculates the part of energy needed for MC moves (not currently used) \\
+\hline
+\verb+simulation::interaction_energy+ &  \verb+mc.cpp+ & Determinse whether to calculate interaction energy exactly or using tables, which table is needed, and which fragment will be the reference fragment \\
+\hline
+\verb+simulation::simulation+ & \verb+init.cpp+ & Supervises most of the initialization, including processing input for simulations, reading in all files, and fitting fragments to the initial structure\\
+\hline
+\verb+simulation::calculate_born_radii+ & \verb+solvation.cpp+ & Supervise the calculation of Born radii. (GB version only.) \\
+\hline
+\end{tabular}
+
+\section{class \texttt{topology}}
+
+This class represents topology information for the current system and is defined in \verb+topology.h+.  
+
+\subsection{Major fields}
+
+\begin{tabular}{|p{5cm}|p{11cm}|}
+\hline
+Name &  Description \\
+\hline
+\verb+natom+ & Total number of atoms in the system. \\
+\hline
+\verb+atoms+ & Array of structures giving information on individual atoms.  The \verb+fragment+ member indicates the fragment to which a given atom belongs.  The \verb+fragatom+ member indicates the atom's index within its fragment. \\
+\hline
+\verb+nfrag+ & Total number of fragments in the system. \\
+\hline
+\verb+frags+ & Array of structures giving information on fragments.  The \verb+type+ member gives the fragment type number, while the \verb+main_chain_prev+, \verb+main_chain_next+, \verb+side_chain_prev+, and \verb+side_chain_next+ members can be used to walk the protein backbone or side chain.  The \verb+atoms+ member is an array giving the system atom numbers for all atoms within the fragment, indexed by their index within the fragment.  \\
+\hline
+\verb+nfragtypes+ & Total number of fragment types available. \\
+\hline
+\verb+fragtypes+ & Array of fragment type objects, indexed by type number. \\
+\hline
+\end{tabular}
+
+\subsection{Major methods}
+
+\begin{tabular}{|p{7cm}|p{3cm}|p{6cm}|}
+\hline
+Name & File & Description \\
+\hline
+\verb+topology::frag_type_by_name+ & \verb+topology.cpp+ & Find the index number corresponding to a fragment type name. \\
+\hline
+\verb+topology::assemble_fragments+ & \verb+topology.cpp+ &  Supervises RMSD fitting of each fragment in its initial structure to its reference geometry. \\
+\hline
+\verb+topology::update_coords+ & \verb+topology.cpp+ & Updates atomic coordinates for one fragment, given the fragment center and orientation. \\
+\hline
+\verb+topology::exact_interaction_energy+ & \verb+mc.cpp+ & Wrapper for \verb+forcefield::exact_interaction_energy+, rearranging coordinates so that they correspond to the atoms within a fragment. \\
+\hline
+\end{tabular}
+
+
+\section{class \texttt{fragmenttype}}
+
+This class represents information on an individual fragment type and is defined in \verb+fragments.h+.  Many methods of this class expect atoms in ``fragment order'' rather than ``system order'', so it may be necessary to perform a reordering.  
+
+\subsection{Major fields}
+\begin{tabular}{|p{5cm}|p{11cm}|}
+\hline
+Name &  Description \\
+\hline
+\verb+fragname+ & Fragment type name. \\
+\hline
+\verb+names+ & Individual atom names within fragment. \\
+\hline
+\verb+types+ & Individual atom type numbers. \\
+\hline
+\verb+refgeom+ & Cartesian coordinates of the reference geometry. \\
+\hline
+\end{tabular}
+
+\subsection{Major methods}
+
+\begin{tabular}{|p{7cm}|p{3cm}|p{6cm}|}
+\hline
+Name & File & Description \\
+\hline
+\verb+fragmenttype::get_coords+ & \verb+fragments.cpp+ & Calculate Cartesian coordinates of atoms from the center and orientation of a fragment. \\
+\hline
+\verb+fragmenttype::fit_fragment+ & \verb+fragments.cpp+ & Determine position and orientation of one fragment by RMSD fitting to atomic coordinates. \\
+\hline
+\verb+fragmenttype::get_average_born_radius+ & \verb+solvation.cpp+ & Compute the ``average'' born radius for a fragment. (GB version only.) \\
+\hline
+\end{tabular}
+
+\section{class \texttt{table}}
+
+This class represents a table and is defined in \verb+tables.h+.
+\subsection{Major fields}
+
+\begin{tabular}{|p{5cm}|p{11cm}|}
+\hline
+Name &  Description \\
+\hline
+\verb+hdr+ & A structure (of type \verb+table_header+) that comprises the header at the beginning of each binary table file and contains information on the resolution of the table, the force field and parameters used to generate it, and the fragments involved. \\
+\hline
+\verb+energy+ & An array of \verb+float+s that contains the actual energy values in the table  \\
+\hline
+\end{tabular}
+
+\subsection{Major methods}
+\begin{tabular}{|p{7cm}|p{3cm}|p{6cm}|}
+\hline
+Name & File & Description \\
+\verb+table::table_interaction_energy+ & \verb+tables.cpp+ &Supervises computation of net displacement and relative orientation and table lookup \\
+\hline
+\verb+table::get_energy+ & \verb+tables.cpp+ & Determines table indices $(n_r, n_\theta, n_\phi, n_{\phi'}, n_{\theta'}, n_{\psi'})$ \\
+\hline
+\verb+table::calculate_index+ & \verb+tables.h+ & Calculates overall table index from table indices $(n_r, n_\theta, n_\phi, n_{\phi'}, n_{\theta'}, n_{\psi'})$ \\
+\hline
+\verb+table::read_table_header_info+& \verb+tablegen.cpp+ & Reads and processes table header information from input file, defines grid for table. \\
+\hline
+\verb+table::print_header_info+ & \verb+tables.cpp+ & Prints information from the table header \\
+\hline
+\verb+table::fill_table+ & \verb+tablegen.cpp+ & Fills the table with interaction energies \\
+\hline
+\verb+table::boltzmann_average_trans+ & \verb+tablegen.cpp+ & Performs translational smoothing \\
+\hline
+\verb+table::boltzmann_average_orient+ & \verb+tablegen.cpp+ & Performs orientational smoothing \\
+\hline
+\verb+table::generate_table+ & \verb+tablegen.cpp+ & Supervises table generation. \\
+\hline
+\verb+table::alloc_read_table+ & \verb+tables.cpp+ & Reads a table from a binary file.  (Constructs a memory mapping for the table file if the symbol \verb+NO_MMAP_TABLES+ is not defined.) \\
+\hline
+\verb+table::write_table+ & \verb+tables.cpp+ & Writes a binary file containing a table. \\
+\hline
+\end{tabular}
+
+
+\section{class \texttt{forcefield}}
+This class contains information about the forcefield and is defined in \verb+ffield.h+.
+
+
+
+\subsection{Major fields}
+\begin{tabular}{|p{5cm}|p{11cm}|}
+\hline
+Name &  Description \\
+\hline
+\verb+vdwParams+ & Van der Waals parameters for each atom type. \\
+\hline
+\verb+bondParams+ & Parameters for the bonding term of the force field.  \\
+\hline
+\verb+angleParams+ & Parameters for the angle term of the force field.  \\
+\hline
+\verb+dihedParams+ & Parameters for the dihedral term of the force field.  \\
+\hline
+\verb+impropParams+ & Parameters for the improper dihedral term of the force field.  \\
+\hline
+\end{tabular}
+
+
+\subsection{Major methods}
+
+\begin{tabular}{|p{7cm}|p{3cm}|p{6cm}|}
+\verb+forcefield::exact_interaction_energy+ & \verb+ffield.cpp+ & Calculates the interaction  \\
+\hline
+\verb+forcefield::non_tab_energy+ & \verb+ffield.cpp+ &Calculates all non-tabulated parts of the energy \\
+\hline
+\verb+forcefield::moved_non_tab_energy+ & \verb+ffield.cpp+ &Calculates parts of non-tabulated energy (not currently used) \\
+\hline
+
+\end{tabular}
+
+
+\end{document}               % End of document.
+
