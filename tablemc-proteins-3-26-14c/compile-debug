@@ -1,0 +1,14 @@
+#!/bin/bash
+
+rm *.o
+#compile all c files
+for f in `ls *.cpp`
+do
+	obj=`echo $f | sed -e 's/\.cpp/.o/g'`
+	g++ -c  -g  -O0  -o $obj $f
+	echo $f $obj
+done
+#link
+#gcc -lm -o tablegen energy.o io.o mt.o rotations.o tablegen.o tables.o
+g++  -g  -O0 -o tablemc-debug  *.o 
+

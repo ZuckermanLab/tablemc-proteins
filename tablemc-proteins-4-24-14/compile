@@ -1,0 +1,38 @@
+#!/bin/bash
+
+mpi=0
+defines=""
+name=tablemc
+#read all defines from the command line
+while [ "$#" -gt "0" ]
+do
+	symbol=$1
+	name=`echo $name $symbol | awk '{print tolower($1"-"$2)}'`
+	def=`echo $symbol | awk '{print "-D"toupper($0)}'`
+	if [ "$def" == "-DPARALLEL" ]; then
+		mpi=1
+	fi
+	if [ "$def" == "-DEXCHANGE" ]; then
+		mpi=1
+	fi
+	defines="$defines $def"
+	shift
+done
+echo $mpi
+if [ "$mpi" -gt "0" ]; then
+	comp=mpiCC
+else
+	comp=/usr/bin/g++
+fi
+rm *.o
+#compile all c files
+for f in `ls *.cpp`
+do
+	obj=`echo $f | sed -e 's/\.cpp/.o/g'`
+	$comp -c  -g  -O3 $defines -ffast-math -march=native -mtune=native -o $obj $f
+	echo $f $obj
+done
+#link
+#gcc -lm -o tablegen energy.o io.o mt.o rotations.o tablegen.o tables.o
+$comp -g  -O3 -ffast-math -march=native -mtune=native  -o $name  *.o #libamdlibm.a
+

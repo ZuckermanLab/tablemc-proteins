@@ -1,0 +1,14 @@
+#!/bin/bash
+
+rm *.o
+#compile all c files
+for f in `ls *.cpp`
+do
+	obj=`echo $f | sed -e 's/\.cpp/.o/g'`
+	/usr/bin/g++ -c  -g -DMMAP_TABLES -DNO_CRC -O3  -ffast-math -march=native -mtune=native -o $obj $f
+	echo $f $obj
+done
+#link
+#gcc -lm -o tablegen energy.o io.o mt.o rotations.o tablegen.o tables.o
+/usr/bin/g++  -g  -O3 -ffast-math -march=native -mtune=native  -o tablemc-no-crc  *.o libamdlibm.a
+

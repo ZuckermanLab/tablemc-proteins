@@ -1,0 +1,14 @@
+#!/bin/bash
+
+rm *.o
+#compile all c files
+for f in `ls *.cpp`
+do
+	obj=`echo $f | sed -e 's/\.cpp/.o/g'`
+	CXX -axAVX -axSSE4.2 -xSSE2 -g -O3 -DMMAP_TABLES -DTIMERS -c -o $obj $f
+	echo $f $obj
+done
+#link
+#gcc -lm -o tablegen energy.o io.o mt.o rotations.o tablegen.o tables.o
+CXX  -g -O3 -o tablemc-timers  *.o 
+

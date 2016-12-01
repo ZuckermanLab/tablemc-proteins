@@ -1,0 +1,14 @@
+#!/bin/bash
+
+rm *.o
+#compile all c files
+for f in `ls *.cpp`
+do
+	obj=`echo $f | sed -e 's/\.cpp/.o/g'`
+	icpc -c  -g  -p -O3 -DNO_CRC -o $obj $f
+	echo $f $obj
+done
+#link
+#gcc -lm -o tablegen energy.o io.o mt.o rotations.o tablegen.o tables.o
+icpc  -g  -p -O3 -o tablemc-prof  *.o 
+
