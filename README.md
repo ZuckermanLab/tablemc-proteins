@@ -15,7 +15,7 @@ Scripts needed for table generation, including reference geometry files for frag
 
 # check/
 
-A set of scripts for testing amino acids.
+A set of scripts for testing the code on peptides containing all 20 amino acids.
 
 # tablemc-proteins.pdf
 
